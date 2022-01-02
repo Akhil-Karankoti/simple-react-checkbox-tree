@@ -1,26 +1,77 @@
-> This project is created to simplify the process of publishing a React component to npm. For a full tutorial on publishing React component to npm, please refer to [this guide](https://medium.com/groftware/how-to-publish-your-react-component-on-npm-9cf48d91944d)
 
-## Guide
-1. Replace contents in `/src` with your React component.
-1. Edit `webpack.config.js`, replace the following:
-	1. `entry: './src/YOUR_COMPONENT.js'` Replace value of `entry` to path to the entry point of your component.
-	1. Replace 	`output.filename` to the name of your component
-	```
-		output: {
-			path: path.resolve('lib'),
-			filename: 'YOUR_COMPONENT.js',
-			libraryTarget: 'commonjs2',
-  	},
-	```
-1. Edit `package.json`, replace the following:
-	1. `"name": "YOUR_PACKAGE_NAME"` Replace the value of `name` to your package name. This will be the name of the package that is published to `npm` and the name that is used when other people install your package using `npm install YOUR_PACKAGE_NAME`.
-	1. Update the values of `version` and `description` to accordingly.
-	1. `"main": "./lib/YOUR_COMPONENT.js"` replace `YOUR_COMPONENT.js` with the name that you've set in `output.filename` during Step #2
-	1. If your component uses any other dependencies, make sure to add them into the `peerDependencies` list.
-1. Building your component by running `npm build` in your command line. This would generate the folder `/lib` which includes your component.
-1. Publishing to [npm](https://www.npmjs.com/)
-	1. Make sure you've [registered an npm account](https://www.npmjs.com/signup)
-	1. Run `npm login` in your command line, and enter your credentials.
-	1. Run `npm publish`, and your React component will be uploaded to npm! You can find it at https://www.npmjs.com/package/[YOUR PACKAGE NAME] or your npm profile.
+# simple-react-checkbox-tree
 
-1. To update your package, make sure you remember to increment the `version` in `package.json`, and then perform Step #5 again.
+A simple checkbox tree for React.
+## Installation
+
+Install with npm
+
+```bash
+  npm install simple-react-checkbox-tree
+```
+    
+## Usage/Examples
+
+```javascript
+import React, { useState } from 'react';
+import CheckBox from 'simple-react-checkbox-tree/lib';
+
+const nodes = [{
+    value: 'mars',
+    label: 'Mars',
+    children: [
+        { value: 'phobos', label: 'Phobos' },
+        { value: 'deimos', label: 'Deimos' },
+    ],
+}];
+
+function App() {
+  const [checked, setChecked] = useState([]);
+  const [expanded, setExpanded] = useState([]);
+
+  return (
+    <CheckboxTree
+      nodes={nodes}
+      checked={checked}
+      expanded={expanded}
+      onCheck={checked => setChecked(checked)}
+      onExpand={expanded => setExpanded(expanded)}
+    />
+  )
+}
+```
+
+All node objects must have a unique value. This value is serialized into the checked and expanded arrays.
+
+By default this package loads material icons through CDN link in css file.
+
+
+
+## Properties
+| Property | Type | Description | Default |
+| --- | --- | --- | :---: |
+| nodes | array | `Required`. Specifies the tree nodes <br/> and their children. |  |
+| checked | array | An array of checked node values. | [ ] |
+| expanded | array | An array of expanded node values. | [ ] |
+| expandDisabled | bool | If true, the ability to expand nodes will be disabled. | false |
+| disabled | bool | An array of expanded node values. | [ ] |
+| expanded | array | If true, the component will be disabled and nodes cannot be checked. | false |
+| name | string | Optional name for the hidden `<input>` element. | undefined |
+| noCascade | bool | If true, toggling a parent node will not cascade its check state to its children. | false |
+| showExpandToggleButtons | bool |If true, buttons for expanding and collapsing all parent nodes will appear in the tree. | false |
+| expandAll | bool | If true, all nodes will be expanded by default | false |
+| folderIcons | bool | If true, all nodes will have folder icon or file icon based on if it is a parent or child | false |
+| onCheck | function | onCheck handler: function(checked) {} | () => {} |
+| onExpand | function | onExpand handler: function(expanded) {} | () => {} |
+
+
+## Nodes
+Individual nodes within the nodes property can have the following structure:
+
+| Property | Type | Description | Default |
+| --- | --- | --- | :---: |
+| label | mixed | `Required.` The node's label. |  |
+| value | mixed | `Required.` The node's value. |  |
+| children | array | An array of child nodes.. | null |
+| renderOnCheck | Node | A Node to render whenever the node label is checked | null |
+
