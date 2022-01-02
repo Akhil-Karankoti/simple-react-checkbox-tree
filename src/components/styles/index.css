@@ -1,0 +1,204 @@
+@import url("https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp");
+
+.rc-checkbox-tree ol {
+    margin: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item {
+    padding: 2px 0px;
+}
+.rc-checkbox-tree li {
+    list-style-type: none;
+    margin: 0;
+    position: relative;
+}
+.rc-checkbox-tree > ol > li::after, .rc-checkbox-tree > ol > li::before {
+    border: 0;
+}
+.rc-checkbox-tree li::before, .rc-checkbox-tree li::after {
+    content: "";
+    left: -8px;
+    position: absolute;
+    right: auto;
+    z-index: -1;
+}
+.rc-checkbox-tree li::before {
+    border-left: 1px solid #84909E;
+    bottom: 50px;
+    height: 100%;
+    top: -3px;
+    width: 1px;
+}
+.rc-checkbox-tree li::after {
+    border-top: 1px solid #84909E;
+    height: 20px;
+    top: 16px;
+    width: 18px;
+}
+.rc-checkbox-tree li:last-child::before {
+    height: 20px;
+}
+/* .rc-checkbox-tree > .checkbox-list > .checkbox-item.expanded-true > .rct-text {
+    background-color: #F1F8FE;
+    border-radius: 3px;
+} */
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text {
+    padding: 4px 5px 3px;
+}
+.rc-checkbox-tree .d-flex {
+    display: flex !important;
+}
+.rc-checkbox-tree .align-items-center {
+    align-items: center !important;
+}
+.rc-checkbox-tree ol ol {
+    padding-left: 24px;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-title {
+    color: #84909E;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 6px;
+    cursor: pointer;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text .icon {
+    cursor: pointer;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .icon {
+    color: #84909E;
+    font-size: 22px;
+    line-height: 10px;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item.expanded-true > .rct-text > .icon {
+    color: #046CD9;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text label{
+    left:10px;
+    top:1px;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text .icon ~ label{
+    left:0px;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text .rct-title{
+    padding-left:15px;
+}
+.rc-checkbox-tree .checkbox-list .checkbox-item .rct-text .icon ~ .rct-title{
+    padding-left:6px;
+}
+.rc-checkbox-tree .disabled {
+    cursor: not-allowed !important;
+}
+.rc-checkbox-tree .checkbox {
+    min-width: 13px;
+    width: 13px;
+    height: 13px;
+    border: 1px solid #CFD4D9;
+    vertical-align: sub;
+    outline: none;
+    border-radius: 3px;
+    position: absolute;
+    top:2px;
+    left:0;
+    cursor: pointer;
+}
+.rc-checkbox-tree .checkbox-container{
+    position: relative;
+}
+.rc-checkbox-tree .partialCheck:checked {
+    background-color: #373f47;
+    border-color: #3c4650;
+}
+.rc-checkbox-tree .nativeCheckbox>span{
+    display: none;
+}
+.rc-checkbox-tree .checkbox-container>input{
+    opacity: 0;
+    height: 0;
+    width: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+}
+.rc-checkbox-tree .checkbox-container{
+  padding-left: 15px;
+}
+.rc-checkbox-tree .checkbox-container:hover input ~ .checkmark {
+    background-color: rgb(228, 227, 227);
+}
+.rc-checkbox-tree .checkbox-container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+.rc-checkbox-tree .checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.rc-checkbox-tree .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+.rc-checkbox-tree .checkbox-container .checkmark:after {
+    left: 3px;
+    top: 0.2px;
+    width: 4px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.rc-checkbox-tree .checkbox-container .partialCheckmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.rc-checkbox-tree .checkbox-container input:checked ~ .partialCheckmark:after {
+    display: block;
+}
+.rc-checkbox-tree .checkbox-container .partialCheckmark:after {
+    left: 1.5px;
+    top: 40%;
+    width: 70%;
+    height: 2px;
+    background-color: grey;
+}
+.rc-checkbox-tree .folder{
+    font-size: 1.4rem;
+    margin-right: 2px;
+}
+.rc-checkbox-tree .justify-content-end{
+    justify-content: end;
+}
+.rc-checkbox-tree .tooltip{
+  display: none;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+.rc-checkbox-tree .tooltip{
+    width: 120px;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+.rc-checkbox-tree .tooltip::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+.rc-checkbox-tree .tooltipTrigger:hover .tooltip {
+    display: initial;
+}
+.rc-checkbox-tree .tooltipTrigger{
+    position: relative;
+}
