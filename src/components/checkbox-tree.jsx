@@ -14,15 +14,17 @@ function CustomCheckBox(props) {
     }, [props.expandAll, props.nodes])
 
     const handleChevron = (value, isOpen) => {
-        let expanded = [...props.expanded]
-        if (isOpen) {
-            expanded.push(value);
+        if(typeof props.onExpand === 'function'){
+            let expanded = [...props.expanded]
+            if (isOpen) {
+                expanded.push(value);
+            }
+            else {
+                let { valuesArray } = getAllChildrenValues(value);
+                expanded = expanded.filter(value => !valuesArray.includes(value))
+            }
+            props.onExpand(expanded);
         }
-        else {
-            let { valuesArray } = getAllChildrenValues(value);
-            expanded = expanded.filter(value => !valuesArray.includes(value))
-        }
-        props.onExpand(expanded);
     }
 
     /**
@@ -207,10 +209,10 @@ function CustomCheckBox(props) {
                                     {
                                         props.folderIcons ?
                                             item.children && item.children.length ?
-                                                <span class="material-icons-outlined folder">
+                                                <span className="material-icons-outlined folder">
                                                     folder
                                                 </span> :
-                                                <span class="material-icons-outlined folder">
+                                                <span className="material-icons-outlined folder">
                                                     description
                                                 </span>
                                             :
@@ -228,11 +230,13 @@ function CustomCheckBox(props) {
         )
     }
     const handleExpandToggle = (c) => {
-        let expandedArray = [];
-        if (c) {
-            getExpandedArray(props.nodes, expandedArray);
+        if(typeof props.onExpand === 'function'){
+            let expandedArray = [];
+            if (c) {
+                getExpandedArray(props.nodes, expandedArray);
+            }
+            props.onExpand(expandedArray);
         }
-        props.onExpand(expandedArray);
     }
 
     return (
