@@ -241,7 +241,7 @@ function CustomCheckBox(props) {
                                             expand_more
                                         </span>
                                     :
-                                    <></>
+                                    ''
                                 }
                                 <label className={`checkbox-container`}>
                                     <input className={`${props.disabled ? 'disabled' : ''}${partialCheck ? 'partialCheck' : ''}`} type='checkbox' disabled={props.disabled} id={item.label} name={props.name} onChange={(e) => handleChecked(e, item.value)} checked={isChecked} />
@@ -258,13 +258,13 @@ function CustomCheckBox(props) {
                                                     description
                                                 </span>
                                             :
-                                            <></>
+                                        ''
                                     }
                                     <span>{item.label}</span>
                                 </label>
-                                {isChecked && item.renderOnCheck ? item.renderOnCheck : <></>}
+                                {isChecked && item.renderOnCheck ? item.renderOnCheck : ''}
                             </span>
-                            {item.children && isExpanded ? getOrderlist(item.children) : <></>}
+                            {item.children && isExpanded ? getOrderlist(item.children) : ''}
                         </li>
                     )
                 })}
@@ -293,7 +293,7 @@ function CustomCheckBox(props) {
                     </div>
                 </div>
                 :
-                <></>
+                ''
             }
             {getOrderlist(props.nodes)}
         </div>
