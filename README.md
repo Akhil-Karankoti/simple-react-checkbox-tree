@@ -2,6 +2,11 @@
 # simple-react-checkbox-tree
 
 A simple checkbox tree for React.
+
+## Demo
+live demo
+https://codesandbox.io/s/simple-react-checkbox-tree-02c9d?file=/src/App.js
+
 ## Installation
 
 Install with npm
