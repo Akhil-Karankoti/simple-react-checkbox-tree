@@ -1,6 +1,6 @@
 {
     "name": "simple-react-checkbox-tree",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A simple react checkbox tree component",
     "main": "./lib/index.js",
     "repository": {

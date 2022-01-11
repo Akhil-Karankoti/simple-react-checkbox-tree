@@ -14,17 +14,15 @@ function CustomCheckBox(props) {
     }, [props.expandAll, props.nodes])
 
     const handleChevron = (value, isOpen) => {
-        if(typeof props.onExpand === 'function'){
-            let expanded = [...props.expanded]
-            if (isOpen) {
-                expanded.push(value);
-            }
-            else {
-                let { valuesArray } = getAllChildrenValues(value);
-                expanded = expanded.filter(value => !valuesArray.includes(value))
-            }
-            props.onExpand(expanded);
+        let expanded = [...props.expanded]
+        if (isOpen) {
+            expanded.push(value);
         }
+        else {
+            let { valuesArray } = getAllChildrenValues(value);
+            expanded = expanded.filter(value => !valuesArray.includes(value))
+        }
+        props.onExpand(expanded);
     }
 
     /**
@@ -37,31 +35,65 @@ function CustomCheckBox(props) {
         let node = dfs_algo_on_nodes(props.nodes, value, parentNodes, includeEmptyChildrenArray);
         let valuesArray = [];
         let partialParentNodesArray = [];
+        let excludePartialParentNodesArray = [];
         populateValuesArrayRecursively(node, valuesArray, includeEmptyChildrenArray);
         if (includeEmptyChildrenArray) {
-            isUnChecked ? populatePartialNodeArrays(value, parentNodes, partialParentNodesArray, valuesArray) : populateValuesArrayWithParentNodeValues(valuesArray, parentNodes, value, partialParentNodesArray);
+            isUnChecked ? populatePartialNodeArrays(value, parentNodes, partialParentNodesArray, valuesArray, excludePartialParentNodesArray) : populateValuesArrayWithParentNodeValues(valuesArray, parentNodes, value, partialParentNodesArray);
         }
         return {
             valuesArray,
-            partialParentNodesArray
+            partialParentNodesArray,
+            excludePartialParentNodesArray
         }
     }
 
-    const populatePartialNodeArrays = (value, parentNodes = [], partialParentNodesArray = [], valuesArray = []) => {
+    const populatePartialNodeArrays = (value, parentNodes = [], partialParentNodesArray = [], valuesArray = [], excludePartialParentNodesArray = []) => {
         let node;
         for (let j = parentNodes.length - 1; j >= 0; j--) {
             node = parentNodes[j];
+            let bool = false;
             for (let i = 0; i < node.children.length; i++) {
-                if (node.children[i].value === value || valuesArray.includes(node.children[i].value)) {
-                    valuesArray.push(node.value);
-                    break;
-                }
-                else if (((node.children[i].value !== value) && props.checked.includes(node.children[i].value)) || partialParentNodesArray.includes(node.children[i].value)) {
+                if ((node.children[i].value !== value) && props.checked.includes(node.children[i].value)) {
                     partialParentNodesArray.push(node.value);
+                    bool = true;
                     break;
                 }
             }
+            if (!bool) {
+                excludePartialParentNodesArray.push(node.value);
+            }
         }
+
+
+
+        // let node, isParent, include;
+        // for (let j = parentNodes.length - 1; j >= 0; j--) {
+        //     node = parentNodes[j];
+        //     isParent = false;
+        //     include = false;
+        //     for (let i = 0; i < node.children.length; i++) {
+        //         if((!valuesArray.includes(node.children[i].value) && props.checked.includes(node.children[i].value)) || partialParentNodesArray.includes(node.children[i].value)){
+        //             include = true;
+        //             break;
+        //         }
+        //         // if(node.children[i].value === value){
+        //         //     include = false;
+        //         // }
+        //         // if (node.children[i].value === value || valuesArray.includes(node.children[i].value)) {
+        //         //     valuesArray.push(node.value);
+        //         //     break;
+        //         // }
+        //         // else if (((node.children[i].value !== value) && props.checked.includes(node.children[i].value)) || partialParentNodesArray.includes(node.children[i].value)) {
+        //         //     partialParentNodesArray.push(node.value);
+        //         //     break;
+        //         // }
+        //     }
+        //     if(include){
+        //         partialParentNodesArray.push(node.value);
+        //     } else {
+        //         valuesArray.push(node.value);
+        //     }
+        // }
     }
 
     /**
@@ -82,6 +114,9 @@ function CustomCheckBox(props) {
                     bool = true;
                     break;
                 }
+                // if(props.checked.includes(node.children[i].value)){
+                //     partialParentNodesArray.push(node.value);
+                // }
             }
             if (!bool) {
                 valuesArray.push(node.value);
@@ -137,7 +172,10 @@ function CustomCheckBox(props) {
                     valuesArray,
                     partialParentNodesArray
                 } = getAllChildrenValues(value, true);
-                setPartialChecked(partialParentNodesArray);
+                let newPartialChecked = [...partialChecked]
+                newPartialChecked.push(...partialParentNodesArray)
+                newPartialChecked = newPartialChecked.filter(value => !valuesArray.includes(value))
+                setPartialChecked(newPartialChecked);
                 selectedItems.push(...valuesArray);
             } else {
                 selectedItems.push(value);
@@ -147,10 +185,14 @@ function CustomCheckBox(props) {
             if (!props.noCascade) {
                 let {
                     valuesArray,
-                    partialParentNodesArray
+                    partialParentNodesArray,
+                    excludePartialParentNodesArray
                 } = getAllChildrenValues(value, true, true);
-                setPartialChecked(partialParentNodesArray);
-                selectedItems = selectedItems.filter(value => !valuesArray.includes(value))
+                // setPartialChecked(partialParentNodesArray);
+                let newPartialChecked = partialChecked.filter(value => !excludePartialParentNodesArray.includes(value));
+                newPartialChecked.push(...partialParentNodesArray)
+                setPartialChecked(newPartialChecked);
+                selectedItems = selectedItems.filter(value => !valuesArray.includes(value) && !partialParentNodesArray.includes(value))
             } else {
                 let index = selectedItems.indexOf(value);
                 selectedItems.splice(index, 1);
@@ -199,30 +241,30 @@ function CustomCheckBox(props) {
                                             expand_more
                                         </span>
                                     :
-                                    ''
+                                    <></>
                                 }
                                 <label className={`checkbox-container`}>
-                                    <input className={`${props.disabled ? 'disabled' : ''}${partialCheck ? 'partialCheck' : ''}`} type='checkbox' disabled={props.disabled} id={item.label} name={props.name} onChange={(e) => handleChecked(e, item.value)} checked={isChecked || partialCheck} />
+                                    <input className={`${props.disabled ? 'disabled' : ''}${partialCheck ? 'partialCheck' : ''}`} type='checkbox' disabled={props.disabled} id={item.label} name={props.name} onChange={(e) => handleChecked(e, item.value)} checked={isChecked} />
                                     <span className={`checkbox ${partialCheck ? 'partialCheckmark' : 'checkmark'}`}></span>
                                 </label>
                                 <label className="text rct-title mb-0 d-flex align-tems-center" key={item.value} htmlFor={item.label}>
                                     {
                                         props.folderIcons ?
                                             item.children && item.children.length ?
-                                                <span className="material-icons-outlined folder">
+                                                <span class="material-icons-outlined folder">
                                                     folder
                                                 </span> :
-                                                <span className="material-icons-outlined folder">
+                                                <span class="material-icons-outlined folder">
                                                     description
                                                 </span>
                                             :
-                                            ''
+                                            <></>
                                     }
                                     <span>{item.label}</span>
                                 </label>
-                                {isChecked && item.renderOnCheck ? item.renderOnCheck : ''}
+                                {isChecked && item.renderOnCheck ? item.renderOnCheck : <></>}
                             </span>
-                            {item.children && isExpanded ? getOrderlist(item.children) : ''}
+                            {item.children && isExpanded ? getOrderlist(item.children) : <></>}
                         </li>
                     )
                 })}
@@ -230,13 +272,11 @@ function CustomCheckBox(props) {
         )
     }
     const handleExpandToggle = (c) => {
-        if(typeof props.onExpand === 'function'){
-            let expandedArray = [];
-            if (c) {
-                getExpandedArray(props.nodes, expandedArray);
-            }
-            props.onExpand(expandedArray);
+        let expandedArray = [];
+        if (c) {
+            getExpandedArray(props.nodes, expandedArray);
         }
+        props.onExpand(expandedArray);
     }
 
     return (
@@ -253,7 +293,7 @@ function CustomCheckBox(props) {
                     </div>
                 </div>
                 :
-                ''
+                <></>
             }
             {getOrderlist(props.nodes)}
         </div>

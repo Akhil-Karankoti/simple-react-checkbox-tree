@@ -106,7 +106,7 @@
 .rc-checkbox-tree .checkbox-container{
     position: relative;
 }
-.rc-checkbox-tree .partialCheck:checked {
+.rc-checkbox-tree .partialCheck {
     background-color: #373f47;
     border-color: #3c4650;
 }
@@ -152,7 +152,7 @@
     position: absolute;
     display: none;
 }
-.rc-checkbox-tree .checkbox-container input:checked ~ .partialCheckmark:after {
+.rc-checkbox-tree .checkbox-container input ~ .partialCheckmark:after {
     display: block;
 }
 .rc-checkbox-tree .checkbox-container .partialCheckmark:after {
